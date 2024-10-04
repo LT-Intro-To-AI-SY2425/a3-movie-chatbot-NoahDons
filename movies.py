@@ -435,4 +435,30 @@ movie_db: List[Tuple[str, str, int, List[str]]] = [
             "spike lee",
         ],
     ),
+    (
+        "Elf",
+        "Jon Favreau",
+        2003,
+        [
+            "will ferrel",
+            "james cann",
+            "bob newhart",
+            "ed asner",
+            "mary steenburgen",
+            "zooey dechanel",
+        ],
+    ),
+    (
+        "Elf",
+        "Jon Favreau",
+        2003,
+        [
+            "will ferrel",
+            "james cann",
+            "bob newhart",
+            "ed asner",
+            "mary steenburgen",
+            "zooey dechanel",
+        ],
+    ),
 ]

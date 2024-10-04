@@ -203,6 +203,27 @@ def title_by_actor(matches: List[str]) -> List[str]:
                 titles.append(get_title(movie))
     return titles
 
+def actors_by_actor(matches: List[str]) -> List[str]:
+    actors = []
+    for movie in movie_db:
+        should_add = False
+        temp_actors = []
+        for actor in get_actors(movie):
+            if actor == matches[0]:
+                should_add = True
+            else:
+                temp_actors.append(actor)
+        if should_add:
+            actors+=temp_actors
+    
+    for i in range(0, len(actors)):
+        for k in range(0, len(actors)):
+            if k != i and actors[i] == actors[k]:
+                actors.pop(k)
+                k-=1
+
+    return actors
+
 
 # dummy argument is ignored and doesn't matter
 def bye_action(dummy: List[str]) -> None:
@@ -224,6 +245,7 @@ pa_list: List[Tuple[List[str], Callable[[List[str]], List[Any]]]] = [
     (str.split("who acted in %"), actors_by_title),
     (str.split("when was % made"), year_by_title),
     (str.split("in what movies did % appear"), title_by_actor),
+    (str.split("what actors worked with %"), actors_by_actor),
     (["bye"], bye_action),
 ]
 
@@ -240,10 +262,28 @@ def search_pa_list(src: List[str]) -> List[str]:
         a list of answers. Will be ["I don't understand"] if it finds no matches and
         ["No answers"] if it finds a match but no answers
     """
+    answers = []
+    match_exists = False
+    answer_exists = False
     for tuple in pa_list:
-        #ismatch = False
-        print(match(tuple[0], src))
-    pass
+        if match(tuple[0], src) != None:
+            match_exists = True
+            answers = tuple[1](match(tuple[0], src))
+            if len(answers) >= 1:
+                answer_exists = True
+
+    if match_exists == True and answer_exists == False:
+        answers.append("No answers")
+        return answers
+    elif match_exists == False:
+        answers.append("I don't understand")
+        return answers
+    else:
+        return answers
+    
+    
+    
+    
 
 
 def query_loop() -> None:
@@ -313,20 +353,22 @@ if __name__ == "__main__":
     ), "failed year_by_title test"
     assert isinstance(title_by_actor(["orson welles"]), list), "title_by_actor not returning a list"
     
-    
-    """
     assert sorted(title_by_actor(["orson welles"])) == sorted(
         ["citizen kane", "othello"]
     ), "failed title_by_actor test"
     assert sorted(search_pa_list(["hi", "there"])) == sorted(
         ["I don't understand"]
     ), "failed search_pa_list test 1"
+
     assert sorted(search_pa_list(["who", "directed", "jaws"])) == sorted(
         ["steven spielberg"]
     ), "failed search_pa_list test 2"
-    """
+
     assert sorted(
         search_pa_list(["what", "movies", "were", "made", "in", "2020"])
     ) == sorted(["No answers"]), "failed search_pa_list test 3"
 
+    assert sorted(actors_by_actor(["ray collins"])) == sorted(["orson welles", "joseph cotten", "dorothy comingore", "george coulouris", "agnes moorehead", "ruth warrick"]), "failed"
     print("All tests passed!")
+    l = ["ray collins"]
+    print(actors_by_actor(l))
