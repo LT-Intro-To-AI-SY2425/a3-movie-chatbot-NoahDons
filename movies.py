@@ -448,17 +448,5 @@ movie_db: List[Tuple[str, str, int, List[str]]] = [
             "zooey dechanel",
         ],
     ),
-    (
-        "Elf",
-        "Jon Favreau",
-        2003,
-        [
-            "will ferrel",
-            "james cann",
-            "bob newhart",
-            "ed asner",
-            "mary steenburgen",
-            "zooey dechanel",
-        ],
-    ),
+    
 ]
